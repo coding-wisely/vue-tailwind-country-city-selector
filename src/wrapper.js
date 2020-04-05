@@ -1,10 +1,10 @@
 // Import vue component
-import component from './vue-tailwind-datepicker.vue';
+import component from './vue-tailwind-country-city-selector.vue';
 // Declare install function executed by Vue.use()
 export function install(Vue) {
     if (install.installed) return;
     install.installed = true;
-    Vue.component('VueTailwindDatepicker', component);
+    Vue.component('VueTailwindCountryCitySelector', component);
 }
 
 // Create module definition for Vue.use()

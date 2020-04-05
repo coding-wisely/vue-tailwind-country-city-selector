@@ -21,9 +21,9 @@
   "keywords": [
     "Tailwind",
     "Vue",
-    "Datepicker",
-    "Vue Datepicker",
-    "Tailwind Vue datepicker"
+    "Country City selector",
+    "City selector",
+    "Country selector"
   ],
   "author": "Vladimir Nikolic <nezaboravi@gmail.com>",
   "license": "MIT",
@@ -37,14 +37,11 @@
     "autoprefixer": "^9.7.4",
     "core-js": "^3.6.4",
     "postcss": "^7.0.26",
+    "postcss-import": "^12.0.1",
     "rollup": "^1.29.0",
     "rollup-plugin-vue": "^5.1.5",
     "tailwind": "^4.0.0",
     "vue": "^2.6.11",
-    "vue-template-compiler": "^2.6.11",
-    "postcss-import": "^12.0.1"
-  },
-  "dependencies": {
-    "moment": "^2.24.0"
+    "vue-template-compiler": "^2.6.11"
   }
 }
