@@ -1,6 +1,6 @@
 <template>
     <div :class="dropdown.visible ? dropDownHeight : ''" class="container select w-84 md:w-full">
-        <div class="relative ">
+        <div class="relative">
             <input
                     :placeholder="placeholder"
                     :required='required'
@@ -45,15 +45,6 @@
       },
       options: {
         type: [Array, Object],
-        required: true,
-        default () {
-          return [
-            'option 1',
-            'option 2',
-            'option 3',
-            'option 4',
-          ]
-        },
       },
       placeholder: {
         type: String,
@@ -77,13 +68,20 @@
         selectData: []
       }
     },
+    computed: {
+      computedOptions() {
+        return this.selectData;
+      }
+    },
     methods: {
       search (e) {
         let key = e.keyCode || e.charCode
+        console.log(this.computedOptions)
         if (key === 8 || key === 46) {
-          this.selectData = this.options
+          console.log('assigning options to selectData')
+          console.log(this.computedOptions)
+          this.selectData = this.computedOptions
         }
-
         this.selectData = this.filter(e)
       },
       filter (e) {
@@ -109,6 +107,7 @@
       },
     },
     mounted () {
+      console.log(this.options)
       this.selectData = this.options
     }
   }
