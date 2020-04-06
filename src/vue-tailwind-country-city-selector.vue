@@ -1,96 +1,79 @@
 <template>
     <div>
-        <form-select :options="countries" v-model="selectedCountry" @input="generateStates"/>
-        <form-select :options="computedStates" v-model="selectedState" v-if="showStates" @input="generateCities"/>
-        <form-select :options="computedCities" v-model="selectedCity" v-if="showCities"/>
+        <div ><form-select :options="countries" v-model="selectedCountry" @input="generateStates"/></div>
+        <div v-if="Object.keys(computedStates).length > 0"><form-select :options="computedStates" v-model="selectedState"  @input="generateCities"/></div>
+        <div v-if="Object.keys(computedCities).length > 0"><form-select :options="computedCities" v-model="selectedCity" v-if="computedCities"/>{{ computedCities }}</div>
     </div>
 </template>
 
 <script>
-    import CountryList from 'countries.json'
-    import FormSelect from "./components/FormSelect";
-    /* eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+  import * as countries from './new/countries.json'
+  const CountryList = countries.default;
 
-    export default {
-        name: "vue-tailwind-country-city-selector",
-        components: {FormSelect},
-        data() {
-            return {
-                countryList: CountryList,
-                stateList: {},
-                countries: {},
-                cities: {},
-                selectedCountry: '',
-                selectedState: '',
-                selectedCity: '',
-                showStates: false,
-                showCities: false
-            }
-        },
-        computed: {
-            computedStates() {
-                if (this.selectedCountry) {
-                    return this.states;
-                }
-                return {};
-            },
-            computedCities() {
-                if (this.showCities) {
-                    return this.cities;
-                }
-                return {};
-            }
-        },
-        methods: {
-            generateStates() {
-                this.showStates = false;
-                this.showCities = false;
-                this.states = {};
-                this.cities = {};
+  import * as states from './new/states.json'
+  const StateList = states.default;
 
-                let states = [];
-                this.countries.forEach((country, index) => {
-                    if (country.name === this.selectedCountry) {
-                        if (this.countryList[index].hasOwnProperty("states")) {
-                            let stateList = this.countryList[index].states;
-                            this.stateList = stateList;
-                            Object.keys(stateList).forEach((item) => {
-                                let name = item;
-                                states.push({name})
-                            });
-                            this.showStates = true;
-                        }
-                    }
-                });
-                this.states = states;
-            },
-            generateCities() {
-                let cities = [];
-                console.log(this.selectedState)
+  import * as cities from './new/cities.json'
+  const CitiesList = cities.default;
 
-                Object.keys(this.stateList).forEach((item) => {
-                    console.log(item)
-console.log(this.stateList)
-                    if (item === this.selectedState) {
-                        this.stateList[item].forEach((name) => {
-                            // console.log(name)
-                            cities.push({name})
-                        })
-                    }
-                });
-                this.showCities = true;
-                this.cities = cities;
-            }
-        },
-        created() {
-            let countries = [];
-            this.countryList.forEach((country) => {
-                let name = country.name;
-                countries.push({name})
-            });
-            this.countries = countries;
+  import FormSelect from './components/FormSelect'
+  /* eslint no-console: ["error", { allow: ["warn", "error", "log"] }] */
+  export default {
+    name: 'vue-tailwind-country-city-selector',
+    components: { FormSelect },
+    data () {
+      return {
+        countryList: CountryList,
+        stateList: StateList,
+        citiesList: CitiesList,
+        countries: {},
+        states: {},
+        cities: {},
+        selectedCountry: '',
+        selectedState: '',
+        selectedCity: '',
+      }
+    },
+    computed: {
+      computedStates () {
+        if (this.states) {
+          return this.states
+        }else{
+          return false;
         }
+      },
+      computedCities () {
+        if (this.showCities) {
+          return this.cities
+        }else{
+          return {}
+        }
+
+      }
+    },
+    methods: {
+      generateStates () {
+        this.states = {};
+        let states = StateList.filter((state)=>state.country_code === this.selectedCountry);
+        this.showStates = true
+        this.states = states
+      },
+      generateCities () {
+        let cities = CitiesList.filter((city)=>city.state_id === this.selectedState);
+        this.showCities = true
+        this.cities = cities
+      }
+    },
+    created () {
+      let countries = []
+      this.countryList.forEach((country) => {
+        let name = country.name
+        let code = country.code
+        countries.push({ code, name })
+      })
+      this.countries = countries
     }
+  }
 </script>
 
 <style scoped>

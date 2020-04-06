@@ -25,8 +25,8 @@
                  v-if="dropdown.visible">
                 <div :key="index" class="last:border-b-0 hover:a4a-very-light-grey cursor-pointer"
                      v-for="(option, index) in selectData">
-                    <p @click="setValue(option.name)" class="w-84 md:w-96 p-3 border-b border-a4a-form-border">
-                        {{option.name}}</p>
+                    <p @click="setValue(option)" class="w-84 md:w-96 p-3 border-b border-a4a-form-border">
+                        {{ option.name }}</p>
                 </div>
             </div>
         </transition>
@@ -34,81 +34,84 @@
 </template>
 
 <script>
-    export default {
-        name: 'FormSelect',
-        props: {
-            error: {
-                type: Boolean,
-            },
-            errorMessage: {
-                type: String,
-            },
-            options: {
-                type: [Array, Object],
-                required: true,
-                default() {
-                    return [
-                        'option 1',
-                        'option 2',
-                        'option 3',
-                        'option 4',
-                    ];
-                },
-            },
-            placeholder: {
-                type: String,
-                default: 'Select a option',
-            },
-            dropDownHeight: {
-                type: String,
-                default: 'h-72',
-            },
-            required: {
-                type: Boolean,
-                default: false,
-            },
+  export default {
+    name: 'FormSelect',
+    props: {
+      error: {
+        type: Boolean,
+      },
+      errorMessage: {
+        type: String,
+      },
+      options: {
+        type: [Array, Object],
+        required: true,
+        default () {
+          return [
+            'option 1',
+            'option 2',
+            'option 3',
+            'option 4',
+          ]
         },
-        data() {
-            return {
-                dropdown: {
-                    visible: false,
-                },
-                chosen: '',
-                selectData: []
-            };
+      },
+      placeholder: {
+        type: String,
+        default: 'Select a option',
+      },
+      dropDownHeight: {
+        type: String,
+        default: 'h-72',
+      },
+      required: {
+        type: Boolean,
+        default: false,
+      },
+    },
+    data () {
+      return {
+        dropdown: {
+          visible: false,
         },
-        methods: {
-            search(e) {
-                let key = e.keyCode || e.charCode;
-                if( key === 8 || key === 46 ){
-                    this.selectData = this.options;
-                }
-                this.selectData = this.filter(e);
-            },
-            filter(e){
-                let result = [];
-                this.selectData.filter((record) => {
-                    if ((record.name).toLowerCase().indexOf(e.target.value.toLowerCase()) !== -1) {
-                        let name = record.name;
-
-                        result.push({name})
-                    }
-                });
-                return [...new Set(result)];
-            },
-            toggle() {
-                this.dropdown.visible = !this.dropdown.visible;
-            },
-            setValue(option) {
-                this.chosen = option;
-                this.$emit('input', option);
-                this.toggle();
-            },
-        },
-        mounted() {
-            this.selectData = this.options
+        chosen: '',
+        selectData: []
+      }
+    },
+    methods: {
+      search (e) {
+        let key = e.keyCode || e.charCode
+        if (key === 8 || key === 46) {
+          this.selectData = this.options
         }
-    };
+
+        this.selectData = this.filter(e)
+      },
+      filter (e) {
+        let result = []
+        this.selectData.filter((record) => {
+
+          if ((record.name).toLowerCase().indexOf(e.target.value.toLowerCase()) !== -1) {
+            let name = record.name
+            let code = record.code
+            result.push({ code, name })
+          }
+        })
+
+        return [...new Set(result)]
+      },
+      toggle () {
+        this.dropdown.visible = !this.dropdown.visible
+      },
+      setValue (option) {
+        this.chosen = option.name
+        this.$emit('input', option.code)
+        this.toggle()
+      },
+    },
+    mounted () {
+      this.selectData = this.options
+    }
+  }
 </script>
 <style scoped>
     .list-enter-active,
